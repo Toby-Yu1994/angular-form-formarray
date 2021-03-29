@@ -89,3 +89,16 @@ export class AppComponent implements OnInit {
   }
   //disable use: control .disable()  ; not disabled(return boolean) not disable(return propoerty)
 }
+// reference: https://netbasal.com/angular-reactive-forms-the-ultimate-guide-to-formarray-3adbe6b0b61a
+
+// compile error NG8002 solution add to spec.ts supercede errors
+// beforeEach(async(() => {
+//     TestBed.configureTestingModule({
+//       declarations: [ yourcomponent ],
+//       schemas: [NO_ERRORS_SCHEMA]
+//     })
+//     .compileComponents();
+//   }));
+
+// NG8004 ERROR pipe missing
+// https://www.angularjswiki.com/angular/how-to-use-angular-pipes-in-components-and-services/
