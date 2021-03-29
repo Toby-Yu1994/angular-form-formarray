@@ -1,10 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { BuyerResp } from "./buyerResp.model";
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
+  ValidationErrors,
+  ValidatorFn,
   Validators
 } from "@angular/forms";
 
@@ -62,11 +65,16 @@ export class AppComponent implements OnInit {
     let i = 0;
     for (i = 0; i < noOfBuyers; i++) {
       this.buyerForm = this.form.get("buyerForm") as FormArray;
+
       // have to declare as FormArray to push elements
-      let buyer = this.fb.group({
-        oa: ["", Validators.required],
-        input: ["", Validators.required]
-      });
+      let buyer = this.fb.group(
+        {
+          oa: ["", Validators.required],
+          input: ["", Validators.required]
+        },
+        // cross-field validation in FormGroup
+        { validators: inputOAvalidator }
+      );
       this.buyerForm.push(buyer);
     }
   }
@@ -76,12 +84,13 @@ export class AppComponent implements OnInit {
       this.buyerForm.controls[i].get("input").value >
       this.buyerForm.controls[i].get("oa").value
     ) {
-      this.buyerForm.controls[i]
-        .get("input")
-        .setErrors({ "input greater than oa": true });
+      // this.buyerForm.controls[i]
+      //   .get("input")
+      //   .setErrors({ "input greater than oa": true });
       // use setError to toggle formControl and parents validity
       return true;
-    }
+    } else return false;
+    //validity not changed ?? cannot set manually
   }
 
   disableControl() {
@@ -89,6 +98,17 @@ export class AppComponent implements OnInit {
   }
   //disable use: control .disable()  ; not disabled(return boolean) not disable(return propoerty)
 }
+
+const inputOAvalidator: ValidatorFn = (
+  control: AbstractControl
+): ValidationErrors | null => {
+  const oa = control.get("oa");
+  const input = control.get("input");
+
+  return oa && input && oa.value < input.value
+    ? { inputGreaterOa: true }
+    : null;
+};
 // reference: https://netbasal.com/angular-reactive-forms-the-ultimate-guide-to-formarray-3adbe6b0b61a
 
 // compile error NG8002 solution add to spec.ts supercede errors
