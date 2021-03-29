@@ -17,12 +17,18 @@
         formControlName="input"
         [ngStyle]="{ 'background-color':buyerForm.controls[i].valid ? 'green' : 'red' }"
       />
+      <div
+        *ngIf="buyerForm.controls[i].errors?.inputGreaterOa && (buyerForm.controls[i].touched || buyerForm.controls[i].dirty)">
+        input cannot be greater than oa
+      </div>
+      <!--use validator drive template dynamically prompt-->
       <p>
         input&gt;oa? is {{validateInput(i)}}
       </p>
       <!--use escape char &lt; for smaller sign-->
       <p>input value is {{buyerForm.controls[i].get('input').value}}</p>
       <p>this input is: {{buyerForm.controls[i].get('input').status}}</p>
+
     </div>
   </div>
 </form>

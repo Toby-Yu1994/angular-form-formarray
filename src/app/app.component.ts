@@ -84,13 +84,9 @@ export class AppComponent implements OnInit {
       this.buyerForm.controls[i].get("input").value >
       this.buyerForm.controls[i].get("oa").value
     ) {
-      // this.buyerForm.controls[i]
-      //   .get("input")
-      //   .setErrors({ "input greater than oa": true });
-      // use setError to toggle formControl and parents validity
+      this.buyerForm.errors?.inputGreaterOa
       return true;
     } else return false;
-    //validity not changed ?? cannot set manually
   }
 
   disableControl() {
@@ -102,7 +98,7 @@ export class AppComponent implements OnInit {
 const inputOAvalidator: ValidatorFn = (
   control: AbstractControl
 ): ValidationErrors | null => {
-  const oa = control.get("oa");
+  let oa = control.get("oa");
   const input = control.get("input");
 
   return oa && input && oa.value < input.value
@@ -110,6 +106,7 @@ const inputOAvalidator: ValidatorFn = (
     : null;
 };
 // reference: https://netbasal.com/angular-reactive-forms-the-ultimate-guide-to-formarray-3adbe6b0b61a
+// https://angular.io/guide/form-validation#custom-validators
 
 // compile error NG8002 solution add to spec.ts supercede errors
 // beforeEach(async(() => {
