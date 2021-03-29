@@ -1,0 +1,27 @@
+<form [formGroup]="form">
+  <button type="submit" (click)="onSubmit()">submit</button>
+  <!--need to import reactiveFormModule in app.module-->
+  <div formArrayName="buyerForm" *ngFor="let buyer of buyers;let i=index">
+    <div [formGroupName]="i">
+      <strong>buyer {{i+1}} : {{buyers[i].name}}</strong>
+      <label>OA</label>
+      <input type="number" formControlName="oa" />
+      <!--[formControl] fails to find oa in the current path. assignment of -->
+      <p>OA value is index {{i}}, {{buyerForm.controls[i].get('oa').value}}</p>
+      <p>this oa is: {{buyerForm.controls[i].get('oa').valid}}</p>
+      <label>Input</label>
+      <input
+        type="number"
+        formControlName="input"
+        [ngStyle]="{ 'background-color': validateInput(i) ? 'red' : 'green' }"
+      />
+      <p>
+        input&lt;oa? is {{buyerForm.controls[i].get('input').value &lt;
+        buyerForm.controls[i].get('oa').value}}
+      </p>
+      <!--use escape char &lt; for smaller sign-->
+      <p>input value is {{buyerForm.controls[i].get('input').value}}</p>
+      <p>this input is: {{buyerForm.controls[i].get('input').status}}</p>
+    </div>
+  </div>
+</form>
